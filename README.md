@@ -1,21 +1,37 @@
-# KomachiHeartbeat
+KomachiHeartbeat
+==
 
-**TODO: Add description**
+Usage
+--
+In Plug app.
 
-## Installation
+```elixir
+defmodule Example.Router do
+  use Plug.Router
+  plug(KomachiHeartbeat, path: "/ops")
+  plug(:match)
+  plug(:dispatch)
+  match(_, do: send_resp(conn, 404, "Not Found"))
+end
+```
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `komachi_heartbeat` to your list of dependencies in `mix.exs`:
+In Phoenix app.
+
+```elixir
+defmodule ExampleWeb.Endpoint do
+  use Phoenix.Endpoint, otp_app: :example
+  plug(KomachiHeartbeat, path: "/ops")
+  plug(ExampleWeb.Router)
+end
+```
+
+Installation
+--
 
 ```elixir
 def deps do
   [
-    {:komachi_heartbeat, "~> 0.1.0"}
+    {:komachi_heartbeat, "~> 0.1"}
   ]
 end
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/komachi_heartbeat](https://hexdocs.pm/komachi_heartbeat).
-

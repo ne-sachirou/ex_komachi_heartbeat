@@ -21,7 +21,8 @@ defmodule KomachiHeartbeat.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:inner_cotton, github: "ne-sachirou/inner_cotton", only: [:dev, :test]}
+      {:inner_cotton, github: "ne-sachirou/inner_cotton", only: [:dev, :test]},
+      {:plug, "~> 1.4"}
     ]
   end
 end
