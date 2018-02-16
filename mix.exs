@@ -5,6 +5,9 @@ defmodule KomachiHeartbeat.MixProject do
     [
       app: :komachi_heartbeat,
       deps: deps(),
+      dialyzer: [
+        plt_add_apps: [:inets, :mix]
+      ],
       elixir: "~> 1.5",
       start_permanent: Mix.env() == :prod,
       version: "0.1.0"
