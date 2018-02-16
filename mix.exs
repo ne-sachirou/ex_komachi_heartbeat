@@ -4,21 +4,15 @@ defmodule KomachiHeartbeat.MixProject do
   def project do
     [
       app: :komachi_heartbeat,
-      version: "0.1.0",
+      deps: deps(),
       elixir: "~> 1.5",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      version: "0.1.0"
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
-  def application do
-    [
-      extra_applications: [:logger]
-    ]
-  end
+  def application, do: [extra_applications: [:logger]]
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
       {:inner_cotton, github: "ne-sachirou/inner_cotton", only: [:dev, :test]},
