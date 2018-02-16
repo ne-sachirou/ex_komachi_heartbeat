@@ -4,8 +4,8 @@ defmodule Example.Router do
 
   use Plug.Router
 
-  plug(KomachiHeartbeat, path: "/ops")
   plug(:match)
   plug(:dispatch)
+  forward("/ops", to: KomachiHeartbeat)
   match(_, do: send_resp(conn, 404, "Not Found"))
 end
