@@ -11,9 +11,9 @@ In Plug app.
 ```elixir
 defmodule Example.Router do
   use Plug.Router
-  plug(KomachiHeartbeat, path: "/ops")
   plug(:match)
   plug(:dispatch)
+  forward("/ops", to: KomachiHeartbeat)
   match(_, do: send_resp(conn, 404, "Not Found"))
 end
 ```
@@ -21,10 +21,9 @@ end
 In Phoenix app.
 
 ```elixir
-defmodule ExampleWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :example
-  plug(KomachiHeartbeat, path: "/ops")
-  plug(ExampleWeb.Router)
+defmodule ExampleWeb.Router do
+  use ExampleWeb, :router
+  forward("/ops", KomachiHeartbeat)
 end
 ```
 

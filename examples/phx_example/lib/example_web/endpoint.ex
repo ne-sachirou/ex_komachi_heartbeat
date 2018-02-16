@@ -44,7 +44,6 @@ defmodule ExampleWeb.Endpoint do
     signing_salt: "WfHYofwL"
   )
 
-  plug(KomachiHeartbeat, path: "/ops")
   plug(ExampleWeb.Router)
 
   @doc """
