@@ -25,6 +25,8 @@ defmodule ExampleWeb.Endpoint do
 end
 ```
 
+For mode detail, see [examples/](examples/) projects.
+
 Installation
 --
 
