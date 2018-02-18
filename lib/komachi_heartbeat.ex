@@ -2,32 +2,59 @@ defmodule KomachiHeartbeat do
   @moduledoc """
   """
 
+  alias KomachiHeartbeat.Vital
+
   use Plug.Router
+
+  @behaviour Vital
 
   plug(:match)
   plug(:dispatch)
 
-  get("/heartbeat", do: send_resp(conn, 200, "ok"))
+  get "/heartbeat" do
+    case vital() do
+      :ok -> send_resp(conn, 200, "ok")
+      _ -> send_resp(conn, 503, "error")
+    end
+  end
+
+  get "/stats" do
+    case stats() do
+      {:ok, stats} -> send_resp(conn, 200, Poison.encode!(stats))
+      {:error, stats} -> send_resp(conn, 503, Poison.encode!(stats))
+    end
+  end
 
   match(_, do: send_resp(conn, 404, ""))
 
-  # alias Plug.Conn
+  @doc """
+  """
+  @impl true
+  @spec stats :: {:ok | :error, %{module => Vital.stats()}}
+  def stats, do: stats(Application.get_env(:komachi_heartbeat, :vitals, []))
 
-  # import Conn
+  @doc false
+  def stats(vitals) do
+    Enum.reduce(vitals, {:ok, %{}}, fn vital, {status, results} ->
+      stats = if function_exported?(vital, :stats, 0), do: vital.stats(), else: vital.vital()
 
-  # @doc """
-  # """
-  # @spec init(Plug.opts()) :: Plug.opts()
-  # def init(opts), do: update_in(opts[:path], &(&1 || "/"))
+      case stats do
+        {:ok, stats} -> {status, put_in(results[vital], stats)}
+        :ok -> {status, put_in(results[vital], :ok)}
+        {:error, stats} -> {:error, put_in(results[vital], stats)}
+        _ -> {:error, put_in(results[vital], :error)}
+      end
+    end)
+  end
 
-  # @doc """
-  # """
-  # @spec call(Conn.t(), Plug.opts()) :: Conn.t()
-  # def call(conn, opts) do
-  #   if "GET" === conn.method and opts[:path] <> "/heartbeat" === conn.request_path do
-  #     conn |> send_resp(200, "ok") |> halt
-  #   else
-  #     conn
-  #   end
-  # end
+  @doc """
+  """
+  @impl true
+  def vital, do: vital(Application.get_env(:komachi_heartbeat, :vitals, []))
+
+  @doc false
+  def vital(vitals) do
+    error_vitals = for vital <- vitals, :ok !== vital.vital(), do: vital
+    if [] === error_vitals, do: :ok, else: :error
+  end
 end

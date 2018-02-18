@@ -8,4 +8,9 @@ defmodule ExampleTest do
     conn = conn(:get, "/ops/heartbeat")
     assert {200, _, "ok"} = sent_resp(Example.Router.call(conn, []))
   end
+
+  test "GET /ops/stats" do
+    conn = conn(:get, "/ops/stats")
+    assert {200, _, "{}"} = sent_resp(Example.Router.call(conn, []))
+  end
 end

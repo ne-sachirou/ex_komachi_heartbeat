@@ -19,7 +19,8 @@ defmodule KomachiHeartbeat.MixProject do
   defp deps do
     [
       {:inner_cotton, github: "ne-sachirou/inner_cotton", only: [:dev, :test]},
-      {:plug, "~> 1.4"}
+      {:plug, "~> 1.4"},
+      {:poison, "~> 3.1"}
     ]
   end
 end
