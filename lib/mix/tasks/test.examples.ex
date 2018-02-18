@@ -8,11 +8,11 @@ defmodule Mix.Tasks.Test.Examples do
   @shortdoc "Test example applications."
 
   def run(_) do
-    test_plug__example()
+    test_plug_example()
     test_phx_example()
   end
 
-  defp test_plug__example do
+  defp test_plug_example do
     File.cd!("examples/plug_example", fn ->
       Mix.Shell.IO.cmd("mix do deps.get, compile")
       Mix.Shell.IO.cmd("mix test --color")
