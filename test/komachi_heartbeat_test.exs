@@ -1,17 +1,23 @@
 defmodule KomachiHeartbeatTest do
+  alias KomachiHeartbeat.Vital
+
   use ExUnit.Case
   use Plug.Test
 
   doctest KomachiHeartbeat
 
-  test "GET /heartbeat" do
-    conn = conn(:get, "/heartbeat")
-    assert {200, _, "ok"} = sent_resp(KomachiHeartbeat.call(conn, []))
+  describe "get /heartbeat" do
+    test "GET /heartbeat" do
+      conn = conn(:get, "/heartbeat")
+      assert {200, _, "ok"} = sent_resp(KomachiHeartbeat.call(conn, []))
+    end
   end
 
-  test "POST /heartbeat" do
-    conn = conn(:post, "/heartbeat")
-    assert {404, _, ""} = sent_resp(KomachiHeartbeat.call(conn, []))
+  describe "get /stats" do
+    test "GET /stats" do
+      conn = conn(:get, "/stats")
+      assert {200, _, "{}"} = sent_resp(KomachiHeartbeat.call(conn, []))
+    end
   end
 
   test "GET /not_found" do
@@ -19,33 +25,73 @@ defmodule KomachiHeartbeatTest do
     assert {404, _, ""} = sent_resp(KomachiHeartbeat.call(conn, []))
   end
 
-  # describe "init/1" do
-  #   test ":path has given", do: assert([path: "/ops"] === KomachiHeartbeat.init(path: "/ops"))
+  describe "stats/0" do
+    test "Default is {:ok, %{}}", do: assert({:ok, %{}} === KomachiHeartbeat.stats([]))
 
-  #   test "Set default :path", do: assert([path: "/"] === KomachiHeartbeat.init([]))
-  # end
+    test ":ok when all vitals are :ok" do
+      defmodule Example.StatsOk1 do
+        @behaviour Vital
 
-  # describe "call/2" do
-  #   test "ok: get,/ops/heartbeat" do
-  #     conn = conn(:get, "/ops/heartbeat")
-  #     assert {200, _, "ok"} = sent_resp(KomachiHeartbeat.call(conn, path: "/ops"))
-  #   end
+        def stats, do: :ok
+      end
 
-  #   for params <- [
-  #         [:post, "/ops/heartbeat", nil],
-  #         [:get, "/ops/heartbeats", nil],
-  #         [:get, "/opss/heartbeat", nil]
-  #       ] do
-  #     @tag params: params
-  #     test "Pass through: #{Enum.join(params, ",")}", %{params: params} do
-  #       conn = apply(&conn/3, params)
-  #       assert(conn === KomachiHeartbeat.call(conn, path: "/ops"))
-  #     end
-  #   end
+      assert {:ok, %{Example.StatsOk1 => :ok}} === KomachiHeartbeat.stats([Example.StatsOk1])
+    end
 
-  #   test "When :path isn't /ops" do
-  #     conn = conn(:get, "/ops/heartbeat")
-  #     assert conn === KomachiHeartbeat.call(conn, path: "/opss")
-  #   end
-  # end
+    test ":ok & collect stats when all vitals are :ok" do
+      defmodule Example.StatsOk2 do
+        @behaviour Vital
+
+        def stats, do: {:ok, 42}
+      end
+
+      assert {:ok, %{Example.StatsOk2 => 42}} === KomachiHeartbeat.stats([Example.StatsOk2])
+    end
+
+    test ":error when some vital is :error" do
+      defmodule Example.StatsError1 do
+        @behaviour Vital
+
+        def stats, do: :error
+      end
+
+      assert {:error, %{Example.StatsError1 => :error}} ===
+               KomachiHeartbeat.stats([Example.StatsError1])
+    end
+
+    test ":error & collect stats when some vital is :error" do
+      defmodule Example.StatsError2 do
+        @behaviour Vital
+
+        def stats, do: {:error, 42}
+      end
+
+      assert {:error, %{Example.StatsError2 => 42}} ===
+               KomachiHeartbeat.stats([Example.StatsError2])
+    end
+  end
+
+  describe "vital/0" do
+    test "Default is :ok", do: assert(:ok === KomachiHeartbeat.vital([]))
+
+    test ":ok when all vitals are :ok" do
+      defmodule Example.VitalOk do
+        @behaviour Vital
+
+        def vital, do: :ok
+      end
+
+      assert :ok === KomachiHeartbeat.vital([Example.VitalOk])
+    end
+
+    test ":error when some vital is :error" do
+      defmodule Example.VitalError do
+        @behaviour Vital
+
+        def vital, do: :error
+      end
+
+      assert :error === KomachiHeartbeat.vital([Example.VitalError])
+    end
+  end
 end

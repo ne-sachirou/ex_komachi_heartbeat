@@ -1,6 +1,6 @@
 KomachiHeartbeat
 ==
-🚅 Vital monitoring Elixir Web application.🚄
+🚅Vital monitoring Elixir Web application.🚄
 
 This respects Rails's [KomachiHeartbeat](https://rubygems.org/gems/komachi_heartbeat).
 
