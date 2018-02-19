@@ -1,7 +1,5 @@
 defmodule Mix.Tasks.Test.Examples do
-  @moduledoc """
-  Test example applications.
-  """
+  @moduledoc false
 
   use Mix.Task
 
