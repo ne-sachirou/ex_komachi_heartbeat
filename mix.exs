@@ -9,6 +9,7 @@ defmodule KomachiHeartbeat.MixProject do
         plt_add_apps: [:inets, :mix]
       ],
       elixir: "~> 1.5",
+      package: package(),
       preferred_cli_env: [
         coveralls: :test,
         "coveralls.detail": :test,
@@ -17,7 +18,16 @@ defmodule KomachiHeartbeat.MixProject do
       ],
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
-      version: "0.1.0"
+      version: "0.1.0",
+
+      # Docs
+      docs: [
+        main: "readme",
+        extras: ["README.md"]
+      ],
+      homepage_url: "https://github.com/ne-sachirou/ex_komachi_heartbeat",
+      name: "KomachiHeartbeat",
+      source_url: "https://github.com/ne-sachirou/ex_komachi_heartbeat"
     ]
   end
 
@@ -25,10 +35,23 @@ defmodule KomachiHeartbeat.MixProject do
 
   defp deps do
     [
+      {:ex_doc, "~> 0.18", only: :dev, runtime: false},
       {:inner_cotton, github: "ne-sachirou/inner_cotton", only: [:dev, :test]},
       {:mock, "~> 0.3", only: :test},
       {:plug, "~> 1.4"},
       {:poison, "~> 3.1"}
+    ]
+  end
+
+  def package do
+    [
+      files: ["LICENSE", "README.md", "mix.exs", "lib"],
+      licenses: ["GPL-3.0"],
+      links: %{
+        GitHub: "https://github.com/ne-sachirou/ex_komachi_heartbeat"
+      },
+      maintainers: ["ne_Sachirou <utakata.c4se@gmail.com>"],
+      name: :komachi_heartbeat
     ]
   end
 end

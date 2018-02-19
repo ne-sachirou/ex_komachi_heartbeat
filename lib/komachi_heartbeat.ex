@@ -1,5 +1,31 @@
 defmodule KomachiHeartbeat do
   @moduledoc """
+  Mount this using `c:Plug.Router.forward/2` or `Phoenix.Router.forward/4`.
+
+  In Plug app.
+
+  ```elixir
+  defmodule Example.Router do
+    use Plug.Router
+
+    plug(:match)
+    plug(:dispatch)
+
+    forward("/ops", to: KomachiHeartbeat)
+  end
+  ```
+
+  In Phoenix app.
+
+  ```elixir
+  defmodule ExampleWeb.Router do
+    use ExampleWeb, :router
+
+    forward("/ops", KomachiHeartbeat)
+  end
+  ```
+
+  We can use `GET /MOUNT_PATH/heartbeat` & `GET /MOUNT_PATH/stats`.
   """
 
   alias __MODULE__.RootVital
