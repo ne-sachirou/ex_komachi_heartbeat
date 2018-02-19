@@ -5,6 +5,7 @@ defmodule KomachiHeartbeat.MixProject do
     [
       app: :komachi_heartbeat,
       deps: deps(),
+      description: "Vital monitoring Elixir Web application.",
       dialyzer: [
         plt_add_apps: [:inets, :mix]
       ],
