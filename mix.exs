@@ -46,7 +46,7 @@ defmodule KomachiHeartbeat.MixProject do
 
   def package do
     [
-      files: ["LICENSE", "README.md", "mix.exs", "lib"],
+      files: ["LICENSE", "README.md", "mix.exs", "lib/*.ex", "lib/komachi_heartbeat"],
       licenses: ["GPL-3.0"],
       links: %{
         GitHub: "https://github.com/ne-sachirou/ex_komachi_heartbeat"
