@@ -18,7 +18,10 @@ defmodule Mix.Tasks.Test.Examples do
       try do
         {:ok, pid} = Task.start_link(fn -> Mix.Shell.IO.cmd("elixir --no-halt -S mix") end)
         Process.sleep(1000)
-        {:ok, {{_, 200, _}, _, 'ok'}} = :httpc.request('http://localhost:4000/ops/heartbeat')
+
+        {:ok, {{_, 200, _}, _, 'heartbeat:ok'}} =
+          :httpc.request('http://localhost:4000/ops/heartbeat')
+
         {:ok, {{_, 200, _}, _, '{}'}} = :httpc.request('http://localhost:4000/ops/stats')
         Process.exit(pid, :normal)
       after
@@ -35,7 +38,10 @@ defmodule Mix.Tasks.Test.Examples do
       try do
         {:ok, pid} = Task.start_link(fn -> Mix.Shell.IO.cmd("mix phx.server") end)
         Process.sleep(2000)
-        {:ok, {{_, 200, _}, _, 'ok'}} = :httpc.request('http://localhost:4000/ops/heartbeat')
+
+        {:ok, {{_, 200, _}, _, 'heartbeat:ok'}} =
+          :httpc.request('http://localhost:4000/ops/heartbeat')
+
         {:ok, {{_, 200, _}, _, '{}'}} = :httpc.request('http://localhost:4000/ops/stats')
         Process.exit(pid, :normal)
       after

@@ -11,13 +11,13 @@ defmodule KomachiHeartbeatTest do
   describe "get /heartbeat" do
     test "GET /heartbeat" do
       conn = conn(:get, "/heartbeat")
-      assert {200, _, "ok"} = sent_resp(KomachiHeartbeat.call(conn, []))
+      assert {200, _, "heartbeat:ok"} = sent_resp(KomachiHeartbeat.call(conn, []))
     end
 
     test_with_mock "GET /heartbeat when :error", RootVital, [:passthrough],
       vital: fn -> :error end do
       conn = conn(:get, "/heartbeat")
-      assert {503, _, "error"} = sent_resp(KomachiHeartbeat.call(conn, []))
+      assert {503, _, "heartbeat:NG"} = sent_resp(KomachiHeartbeat.call(conn, []))
       assert called(RootVital.vital())
     end
   end

@@ -39,7 +39,7 @@ defmodule KomachiHeartbeat.MixProject do
       {:ex_doc, "~> 0.18", only: :dev, runtime: false},
       {:inner_cotton, github: "ne-sachirou/inner_cotton", only: [:dev, :test]},
       {:mock, "~> 0.3", only: :test},
-      {:plug, "~> 1.4"},
+      {:plug, "~> 1.5"},
       {:poison, "~> 3.1"}
     ]
   end

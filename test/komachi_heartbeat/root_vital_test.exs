@@ -1,5 +1,5 @@
 defmodule KomachiHeartbeat.RootVitalTest do
-  alias KomachiHeartbeat.{RootVital, Vital}
+  alias KomachiHeartbeat.RootVital
 
   use ExUnit.Case, async: true
 
@@ -10,7 +10,7 @@ defmodule KomachiHeartbeat.RootVitalTest do
 
     test ":ok when all vitals are :ok" do
       defmodule Example.StatsOk1 do
-        @behaviour Vital
+        @behaviour KomachiHeartbeat.Vital
 
         def stats, do: :ok
       end
@@ -20,7 +20,7 @@ defmodule KomachiHeartbeat.RootVitalTest do
 
     test ":ok & collect stats when all vitals are :ok" do
       defmodule Example.StatsOk2 do
-        @behaviour Vital
+        @behaviour KomachiHeartbeat.Vital
 
         def stats, do: {:ok, 42}
       end
@@ -30,7 +30,7 @@ defmodule KomachiHeartbeat.RootVitalTest do
 
     test ":error when some vital is :error" do
       defmodule Example.StatsError1 do
-        @behaviour Vital
+        @behaviour KomachiHeartbeat.Vital
 
         def stats, do: :error
       end
@@ -40,7 +40,7 @@ defmodule KomachiHeartbeat.RootVitalTest do
 
     test ":error & collect stats when some vital is :error" do
       defmodule Example.StatsError2 do
-        @behaviour Vital
+        @behaviour KomachiHeartbeat.Vital
 
         def stats, do: {:error, 42}
       end
@@ -54,7 +54,7 @@ defmodule KomachiHeartbeat.RootVitalTest do
 
     test ":ok when all vitals are :ok" do
       defmodule Example.VitalOk do
-        @behaviour Vital
+        @behaviour KomachiHeartbeat.Vital
 
         def vital, do: :ok
       end
@@ -64,7 +64,7 @@ defmodule KomachiHeartbeat.RootVitalTest do
 
     test ":error when some vital is :error" do
       defmodule Example.VitalError do
-        @behaviour Vital
+        @behaviour KomachiHeartbeat.Vital
 
         def vital, do: :error
       end
