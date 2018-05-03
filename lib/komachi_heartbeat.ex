@@ -37,8 +37,8 @@ defmodule KomachiHeartbeat do
 
   get "/heartbeat" do
     case RootVital.vital() do
-      :ok -> send_resp(conn, 200, "ok")
-      _ -> send_resp(conn, 503, "error")
+      :ok -> send_resp(conn, 200, "heartbeat:ok")
+      _ -> send_resp(conn, 503, "heartbeat:NG")
     end
   end
 
