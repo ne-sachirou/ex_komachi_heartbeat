@@ -25,10 +25,10 @@ defmodule Example.Mixfile do
 
   defp deps do
     [
-      {:cowboy, "~> 1.0"},
+      {:cowboy, "~> 1.1"},
       {:gettext, "~> 0.15"},
       {:komachi_heartbeat, path: "../.."},
-      {:phoenix, "~> 1.3.2"},
+      {:phoenix, "~> 1.3.3"},
       {:phoenix_pubsub, "~> 1.0"},
     ]
   end

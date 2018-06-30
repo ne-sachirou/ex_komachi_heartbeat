@@ -22,7 +22,7 @@ defmodule Example.MixProject do
     [
       {:cowboy, "~> 1.1"},
       {:komachi_heartbeat, path: "../.."},
-      {:plug, "~> 1.5"}
+      {:plug, "~> 1.6"}
     ]
   end
 end

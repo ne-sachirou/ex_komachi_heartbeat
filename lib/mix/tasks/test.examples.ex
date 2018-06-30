@@ -5,6 +5,7 @@ defmodule Mix.Tasks.Test.Examples do
 
   @shortdoc "Test example applications."
 
+  @impl true
   def run(_) do
     test_plug_example()
     test_phx_example()
@@ -17,7 +18,7 @@ defmodule Mix.Tasks.Test.Examples do
 
       try do
         {:ok, pid} = Task.start_link(fn -> Mix.Shell.IO.cmd("elixir --no-halt -S mix") end)
-        Process.sleep(1000)
+        Process.sleep(2000)
 
         {:ok, {{_, 200, _}, _, 'heartbeat:ok'}} =
           :httpc.request('http://localhost:4000/ops/heartbeat')
@@ -26,6 +27,7 @@ defmodule Mix.Tasks.Test.Examples do
         Process.exit(pid, :normal)
       after
         Mix.Shell.IO.cmd("kill $(lsof -i TCP:4000 | tail -n1 | awk '{print$2}')")
+        Process.sleep(2000)
       end
     end)
   end
@@ -46,6 +48,7 @@ defmodule Mix.Tasks.Test.Examples do
         Process.exit(pid, :normal)
       after
         Mix.Shell.IO.cmd("kill $(lsof -i TCP:4000 | tail -n1 | awk '{print$2}')")
+        Process.sleep(2000)
       end
     end)
   end
