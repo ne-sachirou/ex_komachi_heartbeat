@@ -19,7 +19,7 @@ defmodule KomachiHeartbeat.MixProject do
       ],
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
-      version: "0.1.1",
+      version: "0.2.0",
 
       # Docs
       docs: [
@@ -47,7 +47,7 @@ defmodule KomachiHeartbeat.MixProject do
   def package do
     [
       files: ["LICENSE", "README.md", "mix.exs", "lib/*.ex", "lib/komachi_heartbeat"],
-      licenses: ["GPL-3.0"],
+      licenses: ["GPL-3.0-or-later"],
       links: %{
         GitHub: "https://github.com/ne-sachirou/ex_komachi_heartbeat"
       },
