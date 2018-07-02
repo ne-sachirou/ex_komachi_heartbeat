@@ -52,11 +52,16 @@ defmodule ExampleVital do
 end
 ```
 
-Add this at config.
+Add this at config. In Plug app :
 
 ```elixir
-# config.exs
-config :komachi_heartbeat, vitals: [ExampleVital]
+forward("/ops", to: KomachiHeartbeat, init_opts: [vitals: []])
+```
+
+In Phoenix app :
+
+```elixir
+forward("/ops", KomachiHeartbeat, vitals: [])
 ```
 
 Now `GET /MOUNT_PATH/heartbeat` calls `ExampleVital.vital/0` & response `ok`.
