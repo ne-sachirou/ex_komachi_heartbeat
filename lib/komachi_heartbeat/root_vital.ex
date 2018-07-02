@@ -11,10 +11,9 @@ defmodule KomachiHeartbeat.RootVital do
   Call & aggregate vital plugins `stats/0`.
   """
   @impl true
-  @spec stats :: {:ok | :error, %{module => Vital.stats()}}
   def stats, do: stats(Application.get_env(:komachi_heartbeat, :vitals, []))
 
-  @doc false
+  @spec stats([module]) :: {:ok | :error, %{module => Vital.stats()}}
   def stats(vitals) do
     Enum.reduce(vitals, {:ok, %{}}, fn vital, {status, results} ->
       stats = if function_exported?(vital, :stats, 0), do: vital.stats(), else: vital.vital()
@@ -34,7 +33,7 @@ defmodule KomachiHeartbeat.RootVital do
   @impl true
   def vital, do: vital(Application.get_env(:komachi_heartbeat, :vitals, []))
 
-  @doc false
+  @spec vital([module]) :: :ok | :error
   def vital(vitals) do
     error_vitals = for vital <- vitals, :ok !== vital.vital(), do: vital
     if [] === error_vitals, do: :ok, else: :error

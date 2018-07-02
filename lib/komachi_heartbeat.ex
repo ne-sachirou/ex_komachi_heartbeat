@@ -29,25 +29,53 @@ defmodule KomachiHeartbeat do
   """
 
   alias __MODULE__.RootVital
+  alias Plug.Conn
+
+  require Logger
 
   use Plug.Router
 
   plug(:match)
   plug(:dispatch)
 
+  def call(conn, opts) do
+    opts = update_in(opts[:vitals], &(&1 || []))
+
+    conn
+    |> put_private(:komachi_heartbeat, opts)
+    |> super(opts)
+  end
+
   get "/heartbeat" do
-    case RootVital.vital() do
+    case conn |> vitals |> RootVital.vital() do
       :ok -> send_resp(conn, 200, "heartbeat:ok")
       _ -> send_resp(conn, 503, "heartbeat:NG")
     end
   end
 
   get "/stats" do
-    case RootVital.stats() do
+    case conn |> vitals |> RootVital.stats() do
       {:ok, stats} -> send_resp(conn, 200, Poison.encode!(stats))
       {:error, stats} -> send_resp(conn, 503, Poison.encode!(stats))
     end
   end
 
   match(_, do: send_resp(conn, 404, ""))
+
+  @spec vitals(Conn.t()) :: [module]
+  defp vitals(conn) do
+    case conn.private.komachi_heartbeat[:vitals] do
+      [] ->
+        vitals = Application.get_env(:komachi_heartbeat, :vitals, [])
+
+        unless Enum.empty?(vitals),
+          do:
+            Logger.warn("`config :komachi_heartbeat, vitals: #{inspect(vitals)}` is deprecated.")
+
+        vitals
+
+      vitals ->
+        vitals
+    end
+  end
 end
