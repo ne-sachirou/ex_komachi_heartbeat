@@ -1,15 +1,19 @@
 defmodule KomachiHeartbeat.MixProject do
   use Mix.Project
 
+  @github "https://github.com/ne-sachirou/ex_komachi_heartbeat"
+
   def project do
     [
       app: :komachi_heartbeat,
       deps: deps(),
       description: "Vital monitoring Elixir Web application.",
       dialyzer: [
-        plt_add_apps: [:inets, :mix]
+        plt_add_apps: [:inets, :mix],
+        flags: [:no_undefined_callbacks],
+        remove_defaults: [:unknown]
       ],
-      elixir: "~> 1.5",
+      elixir: "~> 1.6",
       package: package(),
       preferred_cli_env: [
         coveralls: :test,
@@ -19,16 +23,16 @@ defmodule KomachiHeartbeat.MixProject do
       ],
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
-      version: "0.2.0",
+      version: "0.3.0",
 
       # Docs
       docs: [
         main: "readme",
         extras: ["README.md"]
       ],
-      homepage_url: "https://github.com/ne-sachirou/ex_komachi_heartbeat",
+      homepage_url: @github,
       name: "KomachiHeartbeat",
-      source_url: "https://github.com/ne-sachirou/ex_komachi_heartbeat"
+      source_url: @github
     ]
   end
 
@@ -48,9 +52,7 @@ defmodule KomachiHeartbeat.MixProject do
     [
       files: ["LICENSE", "README.md", "mix.exs", "lib/*.ex", "lib/komachi_heartbeat"],
       licenses: ["GPL-3.0-or-later"],
-      links: %{
-        GitHub: "https://github.com/ne-sachirou/ex_komachi_heartbeat"
-      },
+      links: %{GitHub: @github},
       maintainers: ["ne_Sachirou <utakata.c4se@gmail.com>"],
       name: :komachi_heartbeat
     ]

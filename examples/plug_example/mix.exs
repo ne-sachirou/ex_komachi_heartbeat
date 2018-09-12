@@ -20,7 +20,7 @@ defmodule Example.MixProject do
 
   defp deps do
     [
-      {:cowboy, "~> 1.1"},
+      {:cowboy, "~> 2.4"},
       {:komachi_heartbeat, path: "../.."},
       {:plug, "~> 1.6"}
     ]

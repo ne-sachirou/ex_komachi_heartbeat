@@ -74,7 +74,7 @@ Add `:komachi_heartbeat` at `mix.exs`.
 ```elixir
 def deps do
   [
-    {:komachi_heartbeat, "~> 0.2"}
+    {:komachi_heartbeat, "~> 0.3"}
   ]
 end
 ```
