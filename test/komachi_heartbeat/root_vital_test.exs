@@ -12,6 +12,7 @@ defmodule KomachiHeartbeat.RootVitalTest do
       defmodule Example.StatsOk1 do
         @behaviour KomachiHeartbeat.Vital
 
+        @impl KomachiHeartbeat.Vital
         def stats, do: :ok
       end
 
@@ -22,6 +23,7 @@ defmodule KomachiHeartbeat.RootVitalTest do
       defmodule Example.StatsOk2 do
         @behaviour KomachiHeartbeat.Vital
 
+        @impl KomachiHeartbeat.Vital
         def stats, do: {:ok, 42}
       end
 
@@ -32,6 +34,7 @@ defmodule KomachiHeartbeat.RootVitalTest do
       defmodule Example.StatsError1 do
         @behaviour KomachiHeartbeat.Vital
 
+        @impl KomachiHeartbeat.Vital
         def stats, do: :error
       end
 
@@ -42,6 +45,7 @@ defmodule KomachiHeartbeat.RootVitalTest do
       defmodule Example.StatsError2 do
         @behaviour KomachiHeartbeat.Vital
 
+        @impl KomachiHeartbeat.Vital
         def stats, do: {:error, 42}
       end
 
@@ -56,6 +60,7 @@ defmodule KomachiHeartbeat.RootVitalTest do
       defmodule Example.VitalOk do
         @behaviour KomachiHeartbeat.Vital
 
+        @impl KomachiHeartbeat.Vital
         def vital, do: :ok
       end
 
@@ -66,6 +71,7 @@ defmodule KomachiHeartbeat.RootVitalTest do
       defmodule Example.VitalError do
         @behaviour KomachiHeartbeat.Vital
 
+        @impl KomachiHeartbeat.Vital
         def vital, do: :error
       end
 

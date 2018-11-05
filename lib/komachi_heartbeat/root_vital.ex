@@ -10,7 +10,7 @@ defmodule KomachiHeartbeat.RootVital do
   @doc """
   Call & aggregate vital plugins `stats/0`.
   """
-  @impl true
+  @impl Vital
   def stats, do: stats(Application.get_env(:komachi_heartbeat, :vitals, []))
 
   @spec stats([module]) :: {:ok | :error, %{module => Vital.stats()}}
@@ -30,7 +30,7 @@ defmodule KomachiHeartbeat.RootVital do
   @doc """
   Call & aggregate vital plugins `vital/0`.
   """
-  @impl true
+  @impl Vital
   def vital, do: vital(Application.get_env(:komachi_heartbeat, :vitals, []))
 
   @spec vital([module]) :: :ok | :error

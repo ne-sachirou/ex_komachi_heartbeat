@@ -28,6 +28,7 @@ defmodule Example.Mixfile do
       {:cowboy, "~> 1.1"},
       {:gettext, "~> 0.15"},
       {:komachi_heartbeat, path: "../.."},
+      {:plug_cowboy, "~> 1.0"},
       {:phoenix, "~> 1.3.3"},
       {:phoenix_pubsub, "~> 1.0"},
     ]
