@@ -1,7 +1,7 @@
 defmodule ExampleWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :example
 
-  socket("/socket", ExampleWeb.UserSocket)
+  socket("/socket", ExampleWeb.UserSocket, websocket: [])
 
   # Serve at "/" the static files from "priv/static" directory.
   #
