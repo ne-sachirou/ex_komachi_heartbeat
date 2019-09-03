@@ -13,7 +13,7 @@ defmodule KomachiHeartbeat.MixProject do
         flags: [:no_undefined_callbacks],
         remove_defaults: [:unknown]
       ],
-      elixir: "~> 1.7",
+      elixir: "~> 1.8",
       package: package(),
       preferred_cli_env: [
         coveralls: :test,
@@ -24,7 +24,7 @@ defmodule KomachiHeartbeat.MixProject do
       ],
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
-      version: "0.4.0",
+      version: "0.5.0",
 
       # Docs
       docs: [

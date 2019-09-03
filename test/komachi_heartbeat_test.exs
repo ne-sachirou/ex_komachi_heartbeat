@@ -29,10 +29,10 @@ defmodule KomachiHeartbeatTest do
     end
 
     test_with_mock "GET /stats when :error", RootVital, [:passthrough],
-      stats: fn _ -> {:error, %{}} end do
+      stats: fn _, _ -> {:error, %{}} end do
       conn = conn(:get, "/stats")
       assert {503, _, "{}"} = sent_resp(KomachiHeartbeat.call(conn, []))
-      assert called(RootVital.stats([]))
+      assert called(RootVital.stats([], timeout: 5000))
     end
   end
 

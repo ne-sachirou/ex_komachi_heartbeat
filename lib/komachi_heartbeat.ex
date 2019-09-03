@@ -39,7 +39,10 @@ defmodule KomachiHeartbeat do
   plug(:dispatch)
 
   def call(conn, opts) do
-    opts = update_in(opts[:vitals], &(&1 || []))
+    opts =
+      opts
+      |> update_in([:timeout], &(&1 || 5000))
+      |> update_in([:vitals], &(&1 || []))
 
     conn
     |> put_private(:komachi_heartbeat, opts)
@@ -47,14 +50,14 @@ defmodule KomachiHeartbeat do
   end
 
   get "/heartbeat" do
-    case conn |> vitals |> RootVital.vital() do
+    case RootVital.vital(vitals(conn)) do
       :ok -> send_resp(conn, 200, "heartbeat:ok")
       _ -> send_resp(conn, 503, "heartbeat:NG")
     end
   end
 
   get "/stats" do
-    case conn |> vitals |> RootVital.stats() do
+    case RootVital.stats(vitals(conn), timeout: conn.private.komachi_heartbeat[:timeout]) do
       {:ok, stats} -> send_resp(conn, 200, Poison.encode!(stats))
       {:error, stats} -> send_resp(conn, 503, Poison.encode!(stats))
     end
