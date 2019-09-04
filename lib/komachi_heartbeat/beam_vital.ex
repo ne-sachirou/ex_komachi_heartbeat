@@ -16,7 +16,7 @@ defmodule KomachiHeartbeat.BeamVital do
   @doc ""
   @impl Vital
   def stats do
-    stats =
+    original_stats =
       BeamVitalExporter.call(Plug.Test.conn(:get, "/metrics"), []).resp_body
       |> String.split("\n", trim: true)
       |> Enum.reduce(%{}, fn
@@ -44,17 +44,18 @@ defmodule KomachiHeartbeat.BeamVital do
           if is_nil(v), do: stats, else: put_in(stats[String.trim(k)], v)
       end)
 
-    stats = Map.take(stats, ~w[
-      erlang_vm_atom_count
-      erlang_vm_memory_ets_tables
-      erlang_vm_memory_system_bytes_total{usage="atom"}
-      erlang_vm_memory_system_bytes_total{usage="binary"}
-      erlang_vm_memory_system_bytes_total{usage="code"}
-      erlang_vm_memory_system_bytes_total{usage="ets"}
-      erlang_vm_memory_system_bytes_total{usage="other"}
-      erlang_vm_port_count
-      erlang_vm_process_count
-    ])
+    stats = %{
+      "atom_count" => original_stats["erlang_vm_atom_count"],
+      "port_count" => original_stats["erlang_vm_port_count"],
+      "process_count" => original_stats["erlang_vm_process_count"],
+      "memory" => %{
+        "atom" => original_stats[~s(erlang_vm_memory_system_bytes_total{usage="atom"})],
+        "binary" => original_stats[~s(erlang_vm_memory_system_bytes_total{usage="binary"})],
+        "code" => original_stats[~s(erlang_vm_memory_system_bytes_total{usage="code"})],
+        "ets" => original_stats[~s(erlang_vm_memory_system_bytes_total{usage="ets"})],
+        "other" => original_stats[~s(erlang_vm_memory_system_bytes_total{usage="other"})]
+      }
+    }
 
     {:ok, stats}
   end
