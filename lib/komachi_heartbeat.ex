@@ -38,12 +38,17 @@ defmodule KomachiHeartbeat do
   plug(:match)
   plug(:dispatch)
 
-  def call(conn, opts) do
+  def init(opts) do
     opts =
       opts
       |> update_in([:timeout], &(&1 || 5000))
       |> update_in([:vitals], &(&1 || []))
 
+    RootVital.init(opts[:vitals])
+    opts
+  end
+
+  def call(conn, opts) do
     conn
     |> put_private(:komachi_heartbeat, opts)
     |> super(opts)

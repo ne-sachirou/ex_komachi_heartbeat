@@ -18,6 +18,10 @@ defmodule KomachiHeartbeat.Vital do
   @type stats :: Poison.Encoder.t()
 
   @doc """
+  """
+  @callback init :: any
+
+  @doc """
   Statistics. If it's not defined, use `c:vital/0`.
   """
   @callback stats :: :ok | :error | {:ok | :error, stats}

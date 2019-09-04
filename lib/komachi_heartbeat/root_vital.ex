@@ -7,6 +7,14 @@ defmodule KomachiHeartbeat.RootVital do
 
   @behaviour Vital
 
+  @impl Vital
+  def init, do: nil
+
+  @spec init([module]) :: any
+  def init(vitals) do
+    Enum.each(vitals, fn vital -> if function_exported?(vital, :init, 0), do: vital.init() end)
+  end
+
   @doc """
   Call & aggregate vital plugins `stats/0`.
   """

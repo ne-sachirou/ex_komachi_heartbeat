@@ -45,7 +45,9 @@ defmodule KomachiHeartbeat.MixProject do
       {:inner_cotton, github: "ne-sachirou/inner_cotton", only: [:dev, :test]},
       {:mock, "~> 0.3", only: :test},
       {:plug, "~> 1.5"},
-      {:poison, "~> 4.0"}
+      {:poison, "~> 4.0"},
+      {:prometheus_plugs, "~> 1.1", optional: true}
+      # {:prometheus_process_collector, "~> 1.1", optional: true},
     ]
   end
 
