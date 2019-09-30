@@ -11,6 +11,7 @@ defmodule ExampleTest do
 
   test "GET /ops/stats" do
     conn = conn(:get, "/ops/stats")
-    assert {200, _, "{}"} = sent_resp(Example.Router.call(conn, []))
+    assert {200, _, json} = sent_resp(Example.Router.call(conn, []))
+    assert {:ok, _} = Jason.decode(json)
   end
 end

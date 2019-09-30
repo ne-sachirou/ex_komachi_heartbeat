@@ -59,7 +59,7 @@ defmodule KomachiHeartbeat do
   end
 
   def call(conn, opts) do
-    opts = if opts[:json_adapter], do: opts, else: init(opts)
+    opts = init(opts)
 
     conn
     |> put_private(:komachi_heartbeat, opts)

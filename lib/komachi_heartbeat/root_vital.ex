@@ -47,7 +47,8 @@ defmodule KomachiHeartbeat.RootVital do
         end
       end,
       timeout: timeout,
-      on_timeout: :kill_task
+      on_timeout: :kill_task,
+      ordered: true
     )
     |> Enum.zip(vitals)
     |> Enum.map(fn
@@ -68,8 +69,19 @@ defmodule KomachiHeartbeat.RootVital do
   def vital, do: vital(Application.get_env(:komachi_heartbeat, :vitals, []))
 
   @spec vital([module]) :: :ok | :error
-  def vital(vitals) do
-    error_vitals = for vital <- vitals, :ok !== vital.vital(), do: vital
+  def vital(vitals), do: vital(vitals, timeout: 5000)
+
+  @spec vital([module], timeout: pos_integer) :: :ok | :error
+  def vital(vitals, timeout: timeout) do
+    error_vitals =
+      vitals
+      |> Task.async_stream(& &1.vital(), timeout: timeout, on_timeout: :kill_task, ordered: true)
+      |> Enum.zip(vitals)
+      |> Enum.flat_map(fn
+        {{:ok, :ok}, _} -> []
+        {_, vital} -> [vital]
+      end)
+
     if [] === error_vitals, do: :ok, else: :error
   end
 end

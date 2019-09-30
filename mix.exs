@@ -46,9 +46,7 @@ defmodule KomachiHeartbeat.MixProject do
       {:jason, "~> 1.0", optional: true},
       {:mock, "~> 0.3", only: :test},
       {:plug, "~> 1.5"},
-      {:poison, ">= 3.0.0", optional: true},
-      {:prometheus_plugs, "~> 1.1", optional: true}
-      # {:prometheus_process_collector, "~> 1.1", optional: true},
+      {:poison, ">= 3.0.0", optional: true}
     ]
   end
 

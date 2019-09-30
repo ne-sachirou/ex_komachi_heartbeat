@@ -6,6 +6,7 @@ defmodule ExampleWebTest do
   end
 
   test "GET /ops/stats" do
-    assert %{status: 200, resp_body: "{}"} = get(build_conn(), "/ops/stats")
+    assert %{status: 200, resp_body: json} = get(build_conn(), "/ops/stats")
+    assert {:ok, _} = Poison.decode(json)
   end
 end
