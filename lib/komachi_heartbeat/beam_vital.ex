@@ -1,5 +1,6 @@
 defmodule KomachiHeartbeat.BeamVital do
   @moduledoc """
+  Watch the BEAM VM statistics.
   """
 
   alias KomachiHeartbeat.{BeamVitalServer, Vital}

@@ -1,5 +1,6 @@
 defmodule KomachiHeartbeat.BeamVitalServer do
   @moduledoc """
+  Collect BEAM stats which depend on time.
   """
 
   use GenServer

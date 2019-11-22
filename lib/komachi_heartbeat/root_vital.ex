@@ -7,12 +7,23 @@ defmodule KomachiHeartbeat.RootVital do
 
   @behaviour Vital
 
+  @doc """
+  Initialize vital plugins by `init/0`.
+  """
   @impl Vital
   def init, do: nil
 
   @spec init([module]) :: any
-  def init(vitals) do
-    Enum.each(vitals, fn vital -> if function_exported?(vital, :init, 0), do: vital.init() end)
+  def init(vitals), do: init(vitals, timeout: 5000)
+
+  @spec init([module], timeout: pos_integer) :: any
+  def init(vitals, timeout: timeout) do
+    vitals
+    |> Task.async_stream(
+      fn vital -> if function_exported?(vital, :init, 0), do: vital.init() end,
+      timeout: timeout
+    )
+    |> Stream.run()
   end
 
   @doc """
