@@ -19,7 +19,7 @@ defmodule KomachiHeartbeat.BeamVital do
 
   @doc "Return the BEAM stats."
   @impl Vital
-  def stats, do: {:ok, Map.merge(momentary_stats, aggregated_stats)}
+  def stats, do: {:ok, Map.merge(momentary_stats(), aggregated_stats())}
 
   @doc "Detect the VM is up, so this is always OK."
   @impl Vital
