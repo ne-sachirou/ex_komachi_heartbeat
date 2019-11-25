@@ -38,8 +38,28 @@ defmodule KomachiHeartbeat do
   plug(:match)
   plug(:dispatch)
 
+  def init(opts) do
+    apps = Enum.map(Application.loaded_applications(), &elem(&1, 0))
+
+    json_adapter =
+      cond do
+        :jason in apps -> Jason
+        :poison in apps -> Poison
+        true -> Jason
+      end
+
+    opts =
+      opts
+      |> put_in([:json_adapter], json_adapter)
+      |> update_in([:timeout], &(&1 || 5000))
+      |> update_in([:vitals], &(&1 || []))
+
+    RootVital.init(opts[:vitals])
+    opts
+  end
+
   def call(conn, opts) do
-    opts = update_in(opts[:vitals], &(&1 || []))
+    opts = init(opts)
 
     conn
     |> put_private(:komachi_heartbeat, opts)
@@ -47,16 +67,18 @@ defmodule KomachiHeartbeat do
   end
 
   get "/heartbeat" do
-    case conn |> vitals |> RootVital.vital() do
+    case RootVital.vital(vitals(conn)) do
       :ok -> send_resp(conn, 200, "heartbeat:ok")
       _ -> send_resp(conn, 503, "heartbeat:NG")
     end
   end
 
   get "/stats" do
-    case conn |> vitals |> RootVital.stats() do
-      {:ok, stats} -> send_resp(conn, 200, Poison.encode!(stats))
-      {:error, stats} -> send_resp(conn, 503, Poison.encode!(stats))
+    json_adapter = conn.private.komachi_heartbeat[:json_adapter]
+
+    case RootVital.stats(vitals(conn), timeout: conn.private.komachi_heartbeat[:timeout]) do
+      {:ok, stats} -> send_resp(conn, 200, json_adapter.encode!(stats))
+      {:error, stats} -> send_resp(conn, 503, json_adapter.encode!(stats))
     end
   end
 

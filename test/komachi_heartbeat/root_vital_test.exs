@@ -28,6 +28,24 @@ defmodule KomachiHeartbeat.RootVitalTest do
       end
 
       assert {:ok, %{Example.StatsOk2 => 42}} === RootVital.stats([Example.StatsOk2])
+
+      defmodule Example.StatsOk3 do
+        @behaviour KomachiHeartbeat.Vital
+
+        @impl KomachiHeartbeat.Vital
+        def stats, do: {:ok, %{"Example stats" => 42}}
+      end
+
+      assert {:ok, %{"Example stats" => 42}} === RootVital.stats([Example.StatsOk3])
+
+      defmodule Example.StatsOk4 do
+        @behaviour KomachiHeartbeat.Vital
+
+        @impl KomachiHeartbeat.Vital
+        def stats, do: {:ok, example: 42}
+      end
+
+      assert {:ok, %{example: 42}} === RootVital.stats([Example.StatsOk4])
     end
 
     test ":error when some vital is :error" do
@@ -50,6 +68,18 @@ defmodule KomachiHeartbeat.RootVitalTest do
       end
 
       assert {:error, %{Example.StatsError2 => 42}} === RootVital.stats([Example.StatsError2])
+    end
+
+    test ":error when some vital timeouts" do
+      defmodule Example.StatsError3 do
+        @behaviour KomachiHeartbeat.Vital
+
+        @impl KomachiHeartbeat.Vital
+        def stats, do: Process.sleep(10_000)
+      end
+
+      assert {:error, %{Example.StatsError3 => :timeout}} ===
+               RootVital.stats([Example.StatsError3], timeout: 100)
     end
   end
 

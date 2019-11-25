@@ -31,6 +31,7 @@ defmodule Example.Mixfile do
       {:plug_cowboy, "~> 2.0"},
       {:phoenix, "~> 1.4.0"},
       {:phoenix_pubsub, "~> 1.0"},
+      {:poison, "~> 4.0"}
     ]
   end
 end

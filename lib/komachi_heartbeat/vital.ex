@@ -4,10 +4,17 @@ defmodule KomachiHeartbeat.Vital do
 
   ```elixir
   defmodule ExampleVital do
-    @behaviour KomachiHeartbeat.Vital
+    alias KomachiHeartbeat.Vital
 
+    @behaviour Vital
+
+    @impl Vital
+    def init, do: nil
+
+    @impl Vital
     def stats, do: {:ok, 42}
 
+    @impl Vital
     def vital, do: :ok
   end
 
@@ -15,7 +22,12 @@ defmodule KomachiHeartbeat.Vital do
   ```
   """
 
-  @type stats :: Poison.Encoder.t()
+  @type stats :: term
+
+  @doc """
+  Initialize the vital.
+  """
+  @callback init :: any
 
   @doc """
   Statistics. If it's not defined, use `c:vital/0`.

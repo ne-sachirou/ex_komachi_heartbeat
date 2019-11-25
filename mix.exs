@@ -13,7 +13,7 @@ defmodule KomachiHeartbeat.MixProject do
         flags: [:no_undefined_callbacks],
         remove_defaults: [:unknown]
       ],
-      elixir: "~> 1.7",
+      elixir: "~> 1.8",
       package: package(),
       preferred_cli_env: [
         coveralls: :test,
@@ -24,7 +24,7 @@ defmodule KomachiHeartbeat.MixProject do
       ],
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
-      version: "0.4.0",
+      version: "0.5.0",
 
       # Docs
       docs: [
@@ -43,9 +43,10 @@ defmodule KomachiHeartbeat.MixProject do
     [
       {:ex_doc, "~> 0.18", only: :dev, runtime: false},
       {:inner_cotton, github: "ne-sachirou/inner_cotton", only: [:dev, :test]},
+      {:jason, "~> 1.0", optional: true},
       {:mock, "~> 0.3", only: :test},
       {:plug, "~> 1.5"},
-      {:poison, "~> 4.0"}
+      {:poison, ">= 3.0.0", optional: true}
     ]
   end
 
