@@ -5,6 +5,16 @@ defmodule KomachiHeartbeat.BeamVitalServer do
 
   use GenServer
 
+  @type state_item :: %{
+          context_switches: non_neg_integer,
+          gc: %{count: non_neg_integer, words_reclaimed: non_neg_integer},
+          io: %{in: non_neg_integer, out: non_neg_integer},
+          reductions: non_neg_integer,
+          scheduler_usage: %{pos_integer => non_neg_integer}
+        }
+
+  @type state :: [state_item]
+
   @impl GenServer
   def init(_) do
     send(self(), :observe)
@@ -16,14 +26,14 @@ defmodule KomachiHeartbeat.BeamVitalServer do
         gc: %{count: 0, words_reclaimed: 0},
         io: %{in: 0, out: 0},
         reductions: 0,
-        scheduler_usage: []
+        scheduler_usage: %{}
       },
       %{
         context_switches: 0,
         gc: %{count: 0, words_reclaimed: 0},
         io: %{in: 0, out: 0},
         reductions: 0,
-        scheduler_usage: []
+        scheduler_usage: %{}
       }
     ]
 
@@ -52,44 +62,43 @@ defmodule KomachiHeartbeat.BeamVitalServer do
   @impl GenServer
   def handle_info(:observe, state) do
     me = self()
-
-    Task.start_link(fn ->
-      {context_switches, 0} = :erlang.statistics(:context_switches)
-      {number_of_gcs, words_reclaimed, 0} = :erlang.statistics(:garbage_collection)
-      {{:input, input}, {:output, output}} = :erlang.statistics(:io)
-      {total_reductions, _} = :erlang.statistics(:reductions)
-
-      former_flag = :erlang.system_flag(:scheduler_wall_time, true)
-      scheduler_wall_time_1 = :erlang.statistics(:scheduler_wall_time)
-      Process.sleep(1_000)
-      scheduler_wall_time_2 = :erlang.statistics(:scheduler_wall_time)
-      :erlang.system_flag(:scheduler_wall_time, former_flag)
-
-      scheduler_usage =
-        scheduler_wall_time_1
-        |> Enum.sort_by(&elem(&1, 0))
-        |> Enum.zip(Enum.sort_by(scheduler_wall_time_2, &elem(&1, 0)))
-        |> Enum.reject(&match?({{_, active_time, _}, {_, active_time, _}}, &1))
-        |> Enum.map(fn {{scheduler_id, active_time_1, total_time_1},
-                        {scheduler_id, active_time_2, total_time_2}} ->
-          {scheduler_id, (active_time_2 - active_time_1) / (total_time_2 - total_time_1)}
-        end)
-        |> Map.new()
-
-      state_item = %{
-        context_switches: context_switches,
-        gc: %{count: number_of_gcs, words_reclaimed: words_reclaimed},
-        io: %{in: input, out: output},
-        reductions: total_reductions,
-        scheduler_usage: scheduler_usage
-      }
-
-      send(me, {:observed, state_item})
-    end)
-
+    Task.start_link(fn -> send(me, {:observed, observe()}) end)
     {:noreply, state}
   end
 
   def handle_info({:observed, state_item_new}, [state_item_old, _]),
     do: {:noreply, [state_item_new, state_item_old]}
+
+  @spec observe :: state_item
+  def observe do
+    {context_switches, 0} = :erlang.statistics(:context_switches)
+    {number_of_gcs, words_reclaimed, 0} = :erlang.statistics(:garbage_collection)
+    {{:input, input}, {:output, output}} = :erlang.statistics(:io)
+    {total_reductions, _} = :erlang.statistics(:reductions)
+
+    former_flag = :erlang.system_flag(:scheduler_wall_time, true)
+    scheduler_wall_time_1 = :erlang.statistics(:scheduler_wall_time)
+    Process.sleep(1_000)
+    scheduler_wall_time_2 = :erlang.statistics(:scheduler_wall_time)
+    :erlang.system_flag(:scheduler_wall_time, former_flag)
+
+    scheduler_usage =
+      scheduler_wall_time_1
+      |> Enum.sort_by(&elem(&1, 0))
+      |> Enum.zip(Enum.sort_by(scheduler_wall_time_2, &elem(&1, 0)))
+      |> Enum.reject(&match?({{_, active_time, _}, {_, active_time, _}}, &1))
+      |> Enum.map(fn {{scheduler_id, active_time_1, total_time_1},
+                      {scheduler_id, active_time_2, total_time_2}} ->
+        {scheduler_id, (active_time_2 - active_time_1) / (total_time_2 - total_time_1)}
+      end)
+      |> Map.new()
+
+    %{
+      context_switches: context_switches,
+      gc: %{count: number_of_gcs, words_reclaimed: words_reclaimed},
+      io: %{in: input, out: output},
+      reductions: total_reductions,
+      scheduler_usage: scheduler_usage
+    }
+  end
 end

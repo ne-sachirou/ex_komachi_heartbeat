@@ -19,8 +19,14 @@ defmodule KomachiHeartbeat.BeamVital do
 
   @doc "Return the BEAM stats."
   @impl Vital
-  def stats do
-    memory = :erlang.memory()
+  def stats, do: {:ok, Map.merge(momentary_stats, aggregated_stats)}
+
+  @doc "Detect the VM is up, so this is always OK."
+  @impl Vital
+  def vital, do: :ok
+
+  @spec aggregated_stats :: Vital.stats()
+  def aggregated_stats do
     aggregated = GenServer.call(BeamVitalServer, :stats)
 
     stats = %{
@@ -30,6 +36,22 @@ defmodule KomachiHeartbeat.BeamVital do
         "words_reclaimed" => aggregated.gc.words_reclaimed
       },
       "io" => %{"in" => aggregated.io.in, "out" => aggregated.io.out},
+      "reductions" => aggregated.reductions
+    }
+
+    stats =
+      if %{} == aggregated.scheduler_usage,
+        do: stats,
+        else: put_in(stats["scheduler_usage"], aggregated.scheduler_usage)
+
+    stats
+  end
+
+  @spec momentary_stats :: Vital.stats()
+  def momentary_stats do
+    memory = :erlang.memory()
+
+    stats = %{
       "memory" => %{
         "atom" => memory[:atom_used],
         "binary" => memory[:binary],
@@ -39,7 +61,6 @@ defmodule KomachiHeartbeat.BeamVital do
       },
       "port_count" => length(Port.list()),
       "process_count" => :erlang.system_info(:process_count),
-      "reductions" => aggregated.reductions,
       "run_queue" => :erlang.statistics(:run_queue)
     }
 
@@ -52,16 +73,6 @@ defmodule KomachiHeartbeat.BeamVital do
           stats
       end
 
-    stats =
-      case aggregated.scheduler_usage do
-        [] -> stats
-        scheduler_usage -> put_in(stats["scheduler_usage"], scheduler_usage)
-      end
-
-    {:ok, stats}
+    stats
   end
-
-  @doc "Detect the VM is up, so this is always OK."
-  @impl Vital
-  def vital, do: :ok
 end

@@ -4,7 +4,7 @@ defmodule KomachiHeartbeat.Vital do
 
   ```elixir
   defmodule ExampleVital do
-    import KomachiHeartbeat.Vital
+    alias KomachiHeartbeat.Vital
 
     @behaviour Vital
 

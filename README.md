@@ -46,7 +46,7 @@ You can extend KomachiHeartbeat to write vital plugins. Vital plugins should imp
 
 ```elixir
 defmodule ExampleVital do
-  import  KomachiHeartbeat.Vital
+  alias  KomachiHeartbeat.Vital
 
   @behaviour Vital
 
