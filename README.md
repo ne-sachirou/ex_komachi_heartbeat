@@ -1,10 +1,10 @@
+[![Actions Status](https://github.com/ne-sachirou/ex_komachi_heartbeat/workflows/test/badge.svg)](https://github.com/ne-sachirou/ex_komachi_heartbeat/actions)
+[![Coverage Status](https://coveralls.io/repos/github/ne-sachirou/ex_komachi_heartbeat/badge.svg)](https://coveralls.io/github/ne-sachirou/ex_komachi_heartbeat)
+[![Hex.pm](https://img.shields.io/hexpm/v/komachi_heartbeat.svg)](https://hex.pm/packages/komachi_heartbeat)
+
 # KomachiHeartbeat
 
 🚅Vital monitoring Elixir Web application.🚄
-
-[![Hex.pm](https://img.shields.io/hexpm/v/komachi_heartbeat.svg)](https://hex.pm/packages/komachi_heartbeat)
-[![Build Status](https://travis-ci.org/ne-sachirou/ex_komachi_heartbeat.svg?branch=master)](https://travis-ci.org/ne-sachirou/ex_komachi_heartbeat)
-[![Coverage Status](https://coveralls.io/repos/github/ne-sachirou/ex_komachi_heartbeat/badge.svg)](https://coveralls.io/github/ne-sachirou/ex_komachi_heartbeat)
 
 This respects Rails's [KomachiHeartbeat](https://rubygems.org/gems/komachi_heartbeat).
 
