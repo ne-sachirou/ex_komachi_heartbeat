@@ -9,13 +9,14 @@ use Mix.Config
 config :example, ExampleWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "dPcnVIkemJOgBdeFZP6nEVPcFptHMlJNMg4Sq1ZAUrDXwvuamSFAlAEgcEPRGrnh",
-  render_errors: [view: ExampleWeb.ErrorView, accepts: ~w(json)],
-  pubsub: [name: Example.PubSub, adapter: Phoenix.PubSub.PG2]
+  render_errors: [view: ExampleWeb.ErrorView, accepts: ~w(json)]
 
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
+
+config :phoenix, :json_library, Poison
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

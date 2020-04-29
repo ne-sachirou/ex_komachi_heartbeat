@@ -8,6 +8,7 @@ defmodule Example.Application do
 
     # Define workers and child supervisors to be supervised
     children = [
+      {Phoenix.PubSub, [name: Example.PubSub, adapter: Phoenix.PubSub.PG2]},
       # Start the endpoint when the application starts
       supervisor(ExampleWeb.Endpoint, [])
       # Start your own worker by calling: Example.Worker.start_link(arg1, arg2, arg3)
