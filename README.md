@@ -1,8 +1,12 @@
+# KomachiHeartbeat
+
 [![Actions Status](https://github.com/ne-sachirou/ex_komachi_heartbeat/workflows/test/badge.svg)](https://github.com/ne-sachirou/ex_komachi_heartbeat/actions)
 [![Coverage Status](https://coveralls.io/repos/github/ne-sachirou/ex_komachi_heartbeat/badge.svg)](https://coveralls.io/github/ne-sachirou/ex_komachi_heartbeat)
-[![Hex.pm](https://img.shields.io/hexpm/v/komachi_heartbeat.svg)](https://hex.pm/packages/komachi_heartbeat)
-
-# KomachiHeartbeat
+[![Module Version](https://img.shields.io/hexpm/v/komachi_heartbeat.svg)](https://hex.pm/packages/komachi_heartbeat)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/komachi_heartbeat/)
+[![Total Download](https://img.shields.io/hexpm/dt/komachi_heartbeat.svg)](https://hex.pm/packages/komachi_heartbeat)
+[![License](https://img.shields.io/hexpm/l/komachi_heartbeat.svg)](https://github.com/ne-sachirou/ex_komachi_heartbeat/blob/master/LICENSE)
+[![Last Updated](https://img.shields.io/github/last-commit/ne-sachirou/ex_komachi_heartbeat.svg)](https://github.com/ne-sachirou/ex_komachi_heartbeat/commits/master)
 
 🚅Vital monitoring Elixir Web application.🚄
 
@@ -151,3 +155,21 @@ end
 
 [plug example]: https://github.com/ne-sachirou/ex_komachi_heartbeat/tree/master/examples/plug_example
 [phoenix example]: https://github.com/ne-sachirou/ex_komachi_heartbeat/tree/master/examples/phx_example
+
+
+## Copyright and License
+
+Copyright (c) 2018 ne_Sachirou
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
